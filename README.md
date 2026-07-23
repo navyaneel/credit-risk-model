@@ -91,37 +91,43 @@ The model is trained on 17 borrower and loan features:
 
 ### Model Comparison
 | Metric | Logistic Regression | XGBoost |
-|--------|-------------------|---------|
-| ROC-AUC | > 0.75 | > 0.75 |
-| Precision | Baseline | Higher |
-| Recall | Baseline | Higher |
-| F1-Score | Baseline | Higher |
+|--------|:---:|:---:|
+| Accuracy | 0.7675 | *pending* |
+| Precision | 0.3683 | *pending* |
+| Recall | 0.8129 | *pending* |
+| F1-Score | 0.5069 | *pending* |
+| ROC-AUC | **0.8559** | *pending* |
 | Training Speed | Fast | Moderate |
 | Interpretability | High (coefficients) | Medium (SHAP/gain) |
 
-> Both models target **ROC-AUC > 0.75** on the held-out test set (20% split, stratified).
+> Evaluated on a stratified 80/20 train-test split (10,000 synthetic rows, ~14.7% default rate). Both models target **ROC-AUC > 0.75**; Logistic Regression clears this comfortably at 0.856. Recall is intentionally prioritized over precision here via `class_weight='balanced'` — in credit risk, missing an actual defaulter (false negative) is typically costlier than flagging a safe borrower for review (false positive). XGBoost metrics are marked *pending* until run in an environment with the package installed.
 
 ## Visualizations
 
-### Exploratory Data Analysis
-Target distribution, numeric feature histograms, correlation heatmap, and categorical default rates from the EDA tab.
+### Target Distribution
+Class balance between defaulted and non-defaulted loans in the training data.
 
-![Exploratory Data Analysis](images/eda.png)
+![Target Distribution](images/target_distribution.png)
 
-### ROC Curves & Model Comparison
-Side-by-side ROC curves comparing Logistic Regression and XGBoost, with AUC scores annotated.
+### Correlation Matrix
+Correlation heatmap across all numeric borrower and loan features.
 
-![ROC Curves](images/roc_curves.png)
+![Correlation Matrix](images/correlation_matrix.png)
 
-### Confusion Matrices
-Confusion matrix for each model on the held-out test set, showing true/false positives and negatives.
+### ROC Curve
+ROC curve for Logistic Regression, AUC annotated (XGBoost curve to be added once run in an environment with the package installed).
 
-![Confusion Matrices](images/confusion_matrices.png)
+![ROC Curve](images/roc_curve.png)
+
+### Confusion Matrix
+Confusion matrix for Logistic Regression on the held-out test set, showing true/false positives and negatives.
+
+![Confusion Matrix](images/confusion_matrix_lr.png)
 
 ### Feature Importance
-Logistic Regression coefficients vs. XGBoost feature importances (gain-based), highlighting which borrower/loan features drive default risk most.
+Top 15 features by absolute coefficient magnitude for Logistic Regression.
 
-![Feature Importance](images/feature_importance.png)
+![Feature Importance](images/feature_importance_lr.png)
 
 ## Methodology
 - **Data**: Synthetic LendingClub-style dataset covering loan terms, borrower financials, and credit history
