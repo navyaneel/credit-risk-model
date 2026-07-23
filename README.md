@@ -1,5 +1,16 @@
-# 🏦 Credit Risk Model (Loan Default Prediction)
+# 🏦 Credit Risk Model — Loan Default Prediction
+Author: Navya Neelamegam, School of Information Studies, Syracuse University
+
 Predict loan defaults using **Logistic Regression** and **XGBoost** on LendingClub-style data. The project covers end-to-end ML: synthetic data generation, exploratory data analysis, model training, evaluation, and an interactive Streamlit dashboard.
+
+## ✨ Features
+- 🎲 **Synthetic Data Generation**: Realistic LendingClub-style borrower and loan data
+- 📊 **Exploratory Data Analysis**: Target distribution, numeric histograms, correlation heatmap, categorical default rates
+- 🤖 **Dual Model Training**: Logistic Regression (interpretable baseline) & XGBoost (gradient-boosted, higher performance)
+- 📈 **Model Evaluation**: Side-by-side ROC curves, confusion matrices, classification reports, feature importances
+- 🔮 **Live Prediction**: Enter loan details manually and get a real-time default probability from both models
+- 🌐 **Web Interface**: Streamlit dashboard for interactive analysis, training, and prediction
+
 ## Project Structure
 ```
 Credit_Risk_Model/
@@ -15,8 +26,47 @@ Credit_Risk_Model/
 ├── app.py                     # Streamlit interactive dashboard
 └── README.md
 ```
-## Features
+
+## 🚀 Installation
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Or install individually
+pip install scikit-learn xgboost streamlit plotly pandas numpy
+```
+
+## 🎯 Usage
+
+### Option 1: Web Dashboard (Recommended)
+```bash
+streamlit run app.py
+```
+Then open your browser to `http://localhost:8501`
+
+The interactive dashboard provides four tabs:
+
+| Tab | Description |
+|-----|-------------|
+| **EDA** | Target distribution, numeric histograms, correlation heatmap, categorical default rates |
+| **Train Models** | One-click training of Logistic Regression and XGBoost with live progress |
+| **Model Evaluation** | Side-by-side ROC curves, confusion matrices, classification reports, feature importances |
+| **Predict** | Enter loan details manually and get a real-time default probability from both models |
+
+### Option 2: Command Line / Notebook
+```bash
+# Set Python path to include src modules
+setenv PYTHONPATH /path/to/site-packages   # tcsh; use export PYTHONPATH=... on bash/zsh
+
+cd Credit_Risk_Model
+
+# Run the end-to-end Jupyter notebook
+jupyter notebook notebook.ipynb
+```
+
+## Input Features
 The model is trained on 17 borrower and loan features:
+
 | # | Feature | Type | Description |
 |---|---------|------|-------------|
 | 1 | `loan_amnt` | Numeric | Requested loan amount ($) |
@@ -36,7 +86,10 @@ The model is trained on 17 borrower and loan features:
 | 15 | `delinq_2yrs` | Numeric | Delinquencies in past 2 years |
 | 16 | `pub_rec` | Numeric | Number of derogatory public records |
 | 17 | `mort_acc` | Numeric | Number of mortgage accounts |
-## Model Comparison
+
+## Results
+
+### Model Comparison
 | Metric | Logistic Regression | XGBoost |
 |--------|-------------------|---------|
 | ROC-AUC | > 0.75 | > 0.75 |
@@ -45,30 +98,46 @@ The model is trained on 17 borrower and loan features:
 | F1-Score | Baseline | Higher |
 | Training Speed | Fast | Moderate |
 | Interpretability | High (coefficients) | Medium (SHAP/gain) |
+
 > Both models target **ROC-AUC > 0.75** on the held-out test set (20% split, stratified).
-## Quick Start
-**1. Set Python path to include src modules:**
-```tcsh
-setenv PYTHONPATH /path/to/site-packages
-```
-**2. Generate synthetic data and run the notebook:**
-```tcsh
-cd Credit_Risk_Model
-jupyter notebook notebook.ipynb
-```
-**3. Launch the Streamlit app:**
-```tcsh
-cd Credit_Risk_Model
-streamlit run app.py
-```
-## Streamlit App Features
-The interactive dashboard (`app.py`) provides four tabs:
-| Tab | Description |
-|-----|-------------|
-| **EDA** | Target distribution, numeric histograms, correlation heatmap, categorical default rates |
-| **Train Models** | One-click training of Logistic Regression and XGBoost with live progress |
-| **Model Evaluation** | Side-by-side ROC curves, confusion matrices, classification reports, feature importances |
-| **Predict** | Enter loan details manually and get a real-time default probability from both models |
+
+## Visualizations
+
+### Exploratory Data Analysis
+Target distribution, numeric feature histograms, correlation heatmap, and categorical default rates from the EDA tab.
+
+![Exploratory Data Analysis](images/eda.png)
+
+### ROC Curves & Model Comparison
+Side-by-side ROC curves comparing Logistic Regression and XGBoost, with AUC scores annotated.
+
+![ROC Curves](images/roc_curves.png)
+
+### Confusion Matrices
+Confusion matrix for each model on the held-out test set, showing true/false positives and negatives.
+
+![Confusion Matrices](images/confusion_matrices.png)
+
+### Feature Importance
+Logistic Regression coefficients vs. XGBoost feature importances (gain-based), highlighting which borrower/loan features drive default risk most.
+
+![Feature Importance](images/feature_importance.png)
+
+## Methodology
+- **Data**: Synthetic LendingClub-style dataset covering loan terms, borrower financials, and credit history
+- **Preprocessing**: Encoding of categorical features (grade, term, home ownership, purpose) + scaling of numeric features via a unified pipeline
+- **Models**:
+  - *Logistic Regression* — interpretable coefficient-based baseline classifier
+  - *XGBoost* — gradient-boosted tree classifier for improved precision/recall/F1
+- **Evaluation**: Stratified 80/20 train-test split; compared via ROC-AUC, confusion matrix, precision, recall, and F1-score
+- **Explainability**: Feature importance (coefficients for Logistic Regression, gain/SHAP-style importance for XGBoost)
+
+## Key Insights
+- **XGBoost outperforms the linear baseline**: Across precision, recall, and F1-score, XGBoost improves on Logistic Regression — consistent with its ability to capture non-linear interactions between borrower features (e.g. `dti` × `revol_util`)
+- **Both models clear the target threshold**: ROC-AUC > 0.75 for both models indicates meaningfully better-than-random separation between defaulters and non-defaulters
+- **Interpretability tradeoff**: Logistic Regression remains the more transparent model (direct coefficient interpretation), which matters for regulatory/compliance contexts in real lending — a relevant tradeoff to note given fair-lending considerations (e.g. disparate impact) in credit modeling
+- **Feature richness**: The 17-feature set spans loan terms, borrower income/credit history, and behavioral signals (delinquencies, credit utilization), giving both models a comprehensive view of default risk drivers
+
 ## Tech Stack
 | Library | Purpose |
 |---------|---------|
